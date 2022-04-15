@@ -298,10 +298,12 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     deviceDataList.get(deviceNumber).setStatus(String.valueOf(Integer.parseUnsignedInt(filterData[i + 1], 16)));
                     deviceDataList.get(deviceNumber).setCurrent(String.valueOf(totalCurrent));
                     deviceDataList.get(deviceNumber).setDuplicate(duplicateValue);
+                    if(allFragment != null && gridviewFragment != null && listviewFragment != null) {
+                        allFragment.updateTabData(deviceNumber);
+                        gridviewFragment.updateDeviceData(deviceNumber);
+                        listviewFragment.updateTabData(deviceNumber);
+                    }
                 }
-            }
-            if(allFragment != null) {
-                allFragment.updateTabData(deviceDataList);
             }
         }
     }
@@ -371,11 +373,11 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount());
                     return gridviewFragment;
                 case 2:
-                    listviewFragment = new ListviewFragment();
+                    listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount());
                     return listviewFragment;
                 default:
-                    allFragment = new AllFragment();
-                    return allFragment.newInstance(deviceDataList, getSpanCount());
+                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
+                    return allFragment;
             }
         }
 

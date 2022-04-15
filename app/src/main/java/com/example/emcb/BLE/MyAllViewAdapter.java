@@ -132,9 +132,14 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
         }
     }
 
-    public void updateDeviceData(ArrayList<DeviceData> newDeviceDataList) {
+    public void updateDeviceDataList(ArrayList<DeviceData> newDeviceDataList) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new BleDiffUtilCallbacks(mDeviceDataList, newDeviceDataList));
         diffResult.dispatchUpdatesTo(this);
+        mDeviceDataList = newDeviceDataList;
 
+    }
+
+    public void updateDeviceData(int position) {
+        this.notifyItemChanged(position);
     }
 }

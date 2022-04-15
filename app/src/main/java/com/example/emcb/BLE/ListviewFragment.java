@@ -3,6 +3,9 @@ package com.example.emcb.BLE;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,36 +13,28 @@ import android.view.ViewGroup;
 
 import com.example.emcb.R;
 
+import java.util.ArrayList;
+
 
 public class ListviewFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String DEVICE_DATA_LIST = "device_data_list";
+    private static final String GRID_COUNT = "grid_count";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private ArrayList<DeviceData> mDeviceDataList;
+    private int mGridCount;
+    private MyAllViewAdapter myListViewAdapter;
 
     public ListviewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListviewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListviewFragment newInstance(String param1, String param2) {
+    public static ListviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount) {
         ListviewFragment fragment = new ListviewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelableArrayList(DEVICE_DATA_LIST, deviceDataList);
+        args.putInt(GRID_COUNT, gridCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,16 +42,24 @@ public class ListviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        if(getArguments() != null) {
+            mDeviceDataList = getArguments().getParcelableArrayList(DEVICE_DATA_LIST);
+            mGridCount = getArguments().getInt(GRID_COUNT);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_listview, container, false);
+        View view = inflater.inflate(R.layout.fragment_listview, container, false);
+        recyclerView = view.findViewById(R.id.gridRecyclerView);
+        myListViewAdapter = new MyAllViewAdapter(getContext(), mDeviceDataList);
+        recyclerView.setLayoutManager(new LinearLayoutManager((getActivity())));
+        recyclerView.setAdapter(myListViewAdapter);
+        return view;
+    }
+
+    public void updateTabData(int position) {
+        myListViewAdapter.updateDeviceData(position);
     }
 }

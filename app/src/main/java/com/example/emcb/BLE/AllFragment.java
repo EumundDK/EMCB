@@ -64,8 +64,8 @@ public class AllFragment extends Fragment {
         return view;
     }
 
-    public void updateTabData(ArrayList<DeviceData> deviceDataList) {
-       myAllViewAdapter.updateDeviceData(deviceDataList);
+    public void updateTabData(int position) {
+       myAllViewAdapter.updateDeviceData(position);
     }
 
 }

@@ -162,4 +162,8 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_red_12));
         }
     }
+
+    public void updateDeviceData(int position) {
+        this.notifyItemChanged(position);
+    }
 }
