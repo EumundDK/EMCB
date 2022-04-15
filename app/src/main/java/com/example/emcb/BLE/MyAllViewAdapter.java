@@ -28,6 +28,7 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
+    //Error here
     private BluetoothLeService mBluetoothLeSerivce = new BluetoothLeService();
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
