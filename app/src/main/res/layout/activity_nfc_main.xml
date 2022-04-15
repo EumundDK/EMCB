@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NFCTag.NfcMainActivity">
+
+    <LinearLayout
+        android:id="@+id/uidLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/uidCaptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uid"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="serif"/>
+
+            <TextView
+                android:id="@+id/uidTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="12sp"
+                android:typeface="serif"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/nfcSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="NFC Mode: Auto"
+                android:checked="false"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:text="@string/nfc_tap_mode"/>
+
+                <TextView
+                    android:id="@+id/nfc_mode_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:text="@string/blank"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/tagSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/uidLayout"
+        android:stretchColumns="3">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/currentSettingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_setting_a"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="2"/>
+
+            <EditText
+                android:id="@+id/currentSettingEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_column="3"
+                android:inputType="numberDecimal"
+                android:hint="1.0 - 40.0"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/slaveIdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/slave_id"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="2"/>
+
+            <EditText
+                android:id="@+id/slaveIdEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_column="3"
+                android:inputType="numberDecimal"
+                android:hint="1 - 100"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/cutOffPeriodText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/cut_off_period_s"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/semicolon"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/cutOffPeriodEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:hint="20 - 300"
+                android:inputType="numberDecimal"
+                android:textSize="20sp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/onOffSettingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/on_off_setting"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="2"/>
+
+            <EditText
+                android:id="@+id/onOffSettingEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_column="3"
+                android:inputType="numberDecimal"
+                android:hint="0 - 1"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/autoReconnectText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/auto_reconnect"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="2"/>
+
+            <EditText
+                android:id="@+id/autoReconnectEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_column="3"
+                android:inputType="numberDecimal"
+                android:hint="0 - 1"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/ownerNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/owner_name"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semicolon"
+                android:textSize="20sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_column="2"/>
+
+            <EditText
+                android:id="@+id/ownerNameEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_column="3"
+                android:inputType="text"
+                android:maxLength="16"
+                android:hint="DengKai" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tagSetting"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/writeMemoryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/write_memory" />
+
+        <Button
+            android:id="@+id/readMemoryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/read_memory" />
+
+        <Button
+            android:id="@+id/bootloaderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/nfc_bootloader" />
+
+    </LinearLayout>
+</RelativeLayout>

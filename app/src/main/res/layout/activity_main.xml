@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".5">
+
+        <TextView
+            android:id="@+id/bluetoothText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/bluetooth"
+            android:textSize="32sp"
+            android:textColor="@color/dark_blue"
+            android:textAlignment="center"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/design_default_color_primary"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".5">
+
+        <TextView
+            android:id="@+id/nfcTagText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/nfctag"
+            android:textSize="32sp"
+            android:textColor="@color/st_light_blue"
+            android:textAlignment="center"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
