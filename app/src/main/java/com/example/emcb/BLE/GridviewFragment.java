@@ -25,12 +25,13 @@ public class GridviewFragment extends Fragment {
     private ArrayList<DeviceData> mDeviceDataList = new ArrayList<>();
     private int mGridCount;
     private MyGridViewAdapter myGridViewAdapter;
+    private BluetoothLeService mBluetoothLeService;
 
     public GridviewFragment() {
         // Required empty public constructor
     }
 
-    public static GridviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount) {
+    public static GridviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount, BluetoothLeService bluetoothLeService) {
         GridviewFragment fragment = new GridviewFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(DEVICE_DATA_LIST, deviceDataList);
@@ -54,7 +55,7 @@ public class GridviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all, container, false);
 
         recyclerView = view.findViewById(R.id.gridRecyclerView);
-        myGridViewAdapter = new MyGridViewAdapter(getContext(), mDeviceDataList);
+        myGridViewAdapter = new MyGridViewAdapter(getContext(), mDeviceDataList, mBluetoothLeService);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mGridCount));
         recyclerView.setAdapter(myGridViewAdapter);
 

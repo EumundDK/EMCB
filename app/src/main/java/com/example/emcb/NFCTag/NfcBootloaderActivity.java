@@ -47,6 +47,9 @@ public class NfcBootloaderActivity extends AppCompatActivity implements TagDisco
 
     static final String TAG = "NfcBootloaderActivity";
 
+    private final int maxFileLength = 16384;
+    private final int maxDataLength = 256;
+
     private Action mCurrentAction;
 
     private Button selectFileButton;
@@ -72,15 +75,9 @@ public class NfcBootloaderActivity extends AppCompatActivity implements TagDisco
 
     private InputStream mFirmwareInputStream;
 
-    private int sendFtmDataLength = 253;
-    private byte sendFtmDataCounter = 0;
-
-    private byte[] bootloaderData = new byte[8192];
-    private byte[] randomData;
-
-    private byte[] receiveData = new byte[256];
-    private int receiveLength = 256;
-    private byte[] sendFtmData = new byte[256];
+    private byte[] bootloaderData = new byte[maxFileLength];
+    private byte[] receiveData = new byte[maxDataLength];
+    private byte[] sendData = new byte[maxDataLength];
 
     enum Action {
         IDLE,
@@ -367,7 +364,7 @@ public class NfcBootloaderActivity extends AppCompatActivity implements TagDisco
                         byte cmdId = mIsErrorRecoveryEnabled ? FTM_CMD_READ_DATA : FTM_CMD_READ_DATA_NO_ERROR_RECOVERY;
                         int mbAddress = 0;
 //                        mDataReceived = mFtmCommands.sendCmdAndWaitForCompletion(cmdId, null, mIsErrorRecoveryEnabled, true, NfcBootloaderActivity.this, FtmCommands.DEFAULT_FTM_TIME_OUT_IN_MS);
-                        receiveData = myST25DVTag.readMailboxMessage(mbAddress, receiveLength);
+                        receiveData = myST25DVTag.readMailboxMessage(mbAddress, maxDataLength);
                         result = ACTION_SUCCESSFUL;
                         break;
                     case SEND_DATA:
@@ -379,21 +376,21 @@ public class NfcBootloaderActivity extends AppCompatActivity implements TagDisco
                             // There will be one byte of command and (mNbrOfBytesToSend-1) bytes of random data
 //                            randomData = new byte[1];
 //                            mDataReceived = mFtmCommands.sendCmdAndWaitForCompletion(FTM_CMD_SEND_DATA, randomData, mIsErrorRecoveryEnabled, true, NfcBootloaderActivity.this, FtmCommands.DEFAULT_FTM_TIME_OUT_IN_MS);
-                            for(int i = 0; i < mNbrOfBytesToSend; i++) {
-                                int checkData = (i % (sendFtmDataLength));
-                                if(checkData == 0) {
-                                    sendFtmData[checkData] = sendFtmDataCounter;
-                                    sendFtmDataCounter++;
-                                } else {
-                                    sendFtmData[checkData] = bootloaderData[i];
-                                }
-
-                                if((i >= sendFtmDataLength ) && (checkData % sendFtmDataLength == 0)) {
-                                    mFtmResponse = myST25DVTag.writeMailboxMessage(sendFtmData);
-                                } else if (i >= (mNbrOfBytesToSend - 1)) {
-                                    mFtmResponse = myST25DVTag.writeMailboxMessage(sendFtmData);
-                                }
-                            }
+//                            for(int i = 0; i < mNbrOfBytesToSend; i++) {
+//                                int checkData = (i % (maxDataLength));
+//                                if(checkData == 0) {
+//                                    sendData[checkData] = sendFtmDataCounter;
+//                                    sendFtmDataCounter++;
+//                                } else {
+//                                    sendFtmData[checkData] = bootloaderData[i];
+//                                }
+//
+//                                if((i >= sendFtmDataLength ) && (checkData % sendFtmDataLength == 0)) {
+//                                    mFtmResponse = myST25DVTag.writeMailboxMessage(sendFtmData);
+//                                } else if (i >= (mNbrOfBytesToSend - 1)) {
+//                                    mFtmResponse = myST25DVTag.writeMailboxMessage(sendFtmData);
+//                                }
+//                            }
 
                         }
                         result = ACTION_SUCCESSFUL;

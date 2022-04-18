@@ -28,16 +28,16 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    //Error here
-    private BluetoothLeService mBluetoothLeSerivce = new BluetoothLeService();
+    private BluetoothLeService mBluetoothLeSerivce;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
 
-    MyAllViewAdapter(Context context, ArrayList<DeviceData> data) {
+    MyAllViewAdapter(Context context, ArrayList<DeviceData> data, BluetoothLeService bluetoothLeService) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
+        this.mBluetoothLeSerivce = bluetoothLeService;
     }
 
     @NonNull

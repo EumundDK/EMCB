@@ -52,7 +52,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
 
     private String nDeviceName;
     private String nDeviceAddress;
-    private BluetoothLeService mBluetoothLeService;
+    public BluetoothLeService mBluetoothLeService;
     private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     private boolean mConnected = false;
 
@@ -367,16 +367,16 @@ public class DeviceDataTabActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
+                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount(), mBluetoothLeService);
                     return allFragment;
                 case 1:
-                    gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount());
+                    gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount(), mBluetoothLeService);
                     return gridviewFragment;
                 case 2:
-                    listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount());
+                    listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount(), mBluetoothLeService);
                     return listviewFragment;
                 default:
-                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
+                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount(), mBluetoothLeService);
                     return allFragment;
             }
         }

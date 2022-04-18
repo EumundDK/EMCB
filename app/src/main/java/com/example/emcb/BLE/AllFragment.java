@@ -24,18 +24,20 @@ import java.util.List;
 public class AllFragment extends Fragment {
 
     private static final String DEVICE_DATA_LIST = "device_data_list";
+    private static final String BLUETOOTH_SERVICE = "bluetooth_service";
     private static final String GRID_COUNT = "grid_count";
 
     private RecyclerView recyclerView;
     private ArrayList<DeviceData> mDeviceDataList;
     private int mGridCount;
     private MyAllViewAdapter myAllViewAdapter;
+    private BluetoothLeService mBluetoothLeService;
 
     public AllFragment() {
         // Required empty public constructor
     }
 
-    public static AllFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount) {
+    public static AllFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount, BluetoothLeService bluetoothLeService) {
         AllFragment fragment = new AllFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(DEVICE_DATA_LIST, deviceDataList);
@@ -58,7 +60,7 @@ public class AllFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all, container, false);
         recyclerView = view.findViewById(R.id.gridRecyclerView);
-        myAllViewAdapter = new MyAllViewAdapter(getContext(), mDeviceDataList);
+        myAllViewAdapter = new MyAllViewAdapter(getContext(), mDeviceDataList, mBluetoothLeService);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 10));
         recyclerView.setAdapter(myAllViewAdapter);
         return view;

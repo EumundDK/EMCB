@@ -28,16 +28,17 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeService = new BluetoothLeService();
+    private BluetoothLeService mBluetoothLeService;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
 
     // data is passed into the constructor
-    MyGridViewAdapter(Context context, ArrayList<DeviceData> data) {
+    MyGridViewAdapter(Context context, ArrayList<DeviceData> data, BluetoothLeService bluetoothLeService) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
+        this.mBluetoothLeService = bluetoothLeService;
     }
 
     @NonNull

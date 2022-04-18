@@ -25,12 +25,13 @@ public class ListviewFragment extends Fragment {
     private ArrayList<DeviceData> mDeviceDataList;
     private int mGridCount;
     private MyAllViewAdapter myListViewAdapter;
+    private BluetoothLeService mBluetoothLeService;
 
     public ListviewFragment() {
         // Required empty public constructor
     }
 
-    public static ListviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount) {
+    public static ListviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount, BluetoothLeService bluetoothLeService) {
         ListviewFragment fragment = new ListviewFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(DEVICE_DATA_LIST, deviceDataList);
@@ -53,7 +54,7 @@ public class ListviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_listview, container, false);
         recyclerView = view.findViewById(R.id.gridRecyclerView);
-        myListViewAdapter = new MyAllViewAdapter(getContext(), mDeviceDataList);
+        myListViewAdapter = new MyAllViewAdapter(getContext(), mDeviceDataList, mBluetoothLeService);
         recyclerView.setLayoutManager(new LinearLayoutManager((getActivity())));
         recyclerView.setAdapter(myListViewAdapter);
         return view;
