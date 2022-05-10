@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,16 +30,14 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeSerivce;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
 
-    MyAllViewAdapter(Context context, ArrayList<DeviceData> data, BluetoothLeService bluetoothLeService) {
+    MyAllViewAdapter(Context context, ArrayList<DeviceData> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
-        this.mBluetoothLeSerivce = bluetoothLeService;
     }
 
     @NonNull
@@ -82,11 +82,10 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = 0x03;
-                    mBluetoothLeSerivce.writeCharacteristicData(myCommand);
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
                 }
             });
-
         }
     }
 

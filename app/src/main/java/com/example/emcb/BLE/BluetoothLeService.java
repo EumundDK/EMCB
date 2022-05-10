@@ -61,6 +61,7 @@ public class BluetoothLeService extends Service {
     public final static UUID BOSS_STREADER_CUSTOM_SERVICE_UUID = UUID.fromString("36a125be-49c7-462f-8e34-8d5b9dc883ea");
     public final static UUID BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID = UUID.fromString("44122a22-fc66-48e6-92c8-7d02cc9d16fd");
     public final static UUID BOSS_STREADER_WRITE_CUSTOM_CHAR_UUID = UUID.fromString("3dad49ff-61f8-4c7c-a474-74ad70b7c81a");
+    public final static UUID BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID = UUID.fromString("3dad49ff-61f8-4c7c-a474-74ad70b7c81a");
 
     public final static UUID CUSTOM_SERVICE_UUID = UUID.fromString("76e9bc2f-61d8-4676-a50c-29dba51b5dd1");
     public final static UUID CUSTOM_CHAR_UUID = UUID.fromString("11111111-ea4a-47d2-bf2a-cb2b1959fbd2");

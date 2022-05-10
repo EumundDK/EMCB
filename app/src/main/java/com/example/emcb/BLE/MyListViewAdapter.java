@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,22 +30,21 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeSerivce;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
+    private byte[] myEEPCommand;
 
-    MyListViewAdapter(Context context, ArrayList<DeviceData> data, BluetoothLeService bluetoothLeService) {
+    MyListViewAdapter(Context context, ArrayList<DeviceData> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
-        this.mBluetoothLeSerivce = bluetoothLeService;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.data_info_item_list, parent, false);
+        View view = mInflater.inflate(R.layout.data_info_item_list2, parent, false);
         return new ViewHolder(view);
     }
 
@@ -67,6 +68,14 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
         ImageView mStatusOff;
         TextView mCurrent;
         CardView mCardView;
+        Button mButton;
+        TextView mReader;
+        TextView mCurrentSetting;
+        TextView mOnOffSetting;
+        TextView mOwnerName;
+        TextView mCutoffPeriod;
+        TextView mAutoReconnect;
+        LinearLayout mExtraDetailLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +83,14 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
             mStatusOff = itemView.findViewById(R.id.itemStatusOnOff);
             mCurrent = itemView.findViewById(R.id.itemCurrentTextView);
             mCardView = itemView.findViewById(R.id.card_view);
+            mButton = itemView.findViewById(R.id.onOffButton);
+            mReader = itemView.findViewById(R.id.readerExtra);
+            mCurrentSetting = itemView.findViewById(R.id.currentSettingExtra);
+            mOnOffSetting = itemView.findViewById(R.id.onOffSettingExtra);
+            mOwnerName = itemView.findViewById(R.id.ownerNameExtra);
+            mCutoffPeriod = itemView.findViewById(R.id.cutOffPeriodExtra);
+            mAutoReconnect = itemView.findViewById(R.id.autoReconnectExtra);
+            mExtraDetailLayout = itemView.findViewById(R.id.extraDetailLayout);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,7 +99,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = 0x03;
-                    mBluetoothLeSerivce.writeCharacteristicData(myCommand);
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
                 }
             });
@@ -96,7 +113,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
     public boolean checkDuplicate(MyListViewAdapter.ViewHolder holder, DeviceData readerData, int position) {
         if(readerData.getDuplicate() == 0) { //NO DATA BLANK OUT
             holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.bright_grey));
-            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_12));
+            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_24));
             holder.mCurrent.setText(R.string.blank);
             holder.itemView.setClickable(false);
             return false;
@@ -109,7 +126,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
         } else { // DUPE DATA ERROR
             holder.mCurrent.setText("Err");
             holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.light_red));
-            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_12));
+            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_24));
             holder.itemView.setClickable(true);
             return true;
         }
@@ -124,10 +141,16 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
         }
 
         if ((itemStatus & onOffStatusCheck) == onStatus) {
-            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_green_12));
+            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_green_24));
         } else if ((itemStatus & onOffStatusCheck) == offStatus) {
-            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_red_12));
+            holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_red_24));
         }
+    }
+
+    public void updateItemData(){
+        //EEPROM READ
+        myEEPCommand[0] = 1;
+        DeviceDataTabActivity.writeCharacteristicData(myEEPCommand);
     }
 
     public void updateDeviceDataList(ArrayList<DeviceData> newDeviceDataList) {

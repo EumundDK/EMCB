@@ -43,6 +43,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
+                    <ImageView
+                        android:id="@+id/itemStatusOnOff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_circle_grey_24"
+                        app:layout_constraintStart_toEndOf="@+id/itemNameTextView"
+                        app:layout_constraintTop_toTopOf="@id/itemNameTextView"/>
+
                     <TextView
                         android:id="@+id/itemCurrentTextView"
                         android:layout_width="wrap_content"
@@ -64,15 +72,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginEnd="30dp"/>
 
-                    <ImageView
-                        android:id="@+id/itemStatusOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/ic_baseline_circle_grey_24"
-                        app:layout_constraintEnd_toStartOf="@+id/onOffButton"
-                        app:layout_constraintTop_toTopOf="@id/onOffButton"/>
-
                     <Button
                         android:id="@+id/onOffButton"
                         android:layout_width="wrap_content"
@@ -93,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="8sp"
                         android:text="More Details"
+                        android:textColor="@color/st_light_blue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/itemNameTextView"/>
 
@@ -114,6 +114,7 @@
 
                 <TableRow>
                     <TextView
+                        android:id="@+id/readerExtra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Reader X"

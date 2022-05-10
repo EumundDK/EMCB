@@ -28,17 +28,15 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeService;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
 
     // data is passed into the constructor
-    MyGridViewAdapter(Context context, ArrayList<DeviceData> data, BluetoothLeService bluetoothLeService) {
+    MyGridViewAdapter(Context context, ArrayList<DeviceData> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
-        this.mBluetoothLeService = bluetoothLeService;
     }
 
     @NonNull
@@ -87,7 +85,7 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = 0x03;
-                    mBluetoothLeService.writeCharacteristicData(myCommand);
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
                 }
             });
@@ -101,14 +99,14 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     if((itemStatus & onOffStatusCheck) == offStatus) {
                         myCommand[1] = itemName;
                         myCommand[2] = 0x02;
-                        mBluetoothLeService.writeCharacteristicData(myCommand);
+                        DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
                     }
 
                     if((itemStatus & onOffStatusCheck) == onStatus) {
                         myCommand[1] = itemName;
                         myCommand[2] = 0x01;
-                        mBluetoothLeService.writeCharacteristicData(myCommand);
+                        DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
                     }
                 }
