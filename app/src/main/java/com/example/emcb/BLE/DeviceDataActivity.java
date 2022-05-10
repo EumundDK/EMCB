@@ -284,7 +284,7 @@ public class DeviceDataActivity extends AppCompatActivity {
                 if(deviceNumber > 0 && deviceNumber <= totalTag) {
                     deviceNumber = deviceNumber - 1;
                     duplicateValue = deviceDataList.get(deviceNumber).getDuplicate() + 1;
-                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16) * 256, Integer.parseUnsignedInt(filterData[i+3], 16));
+                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+3], 16) * 256, Integer.parseUnsignedInt(filterData[i+2], 16));
 
                     deviceDataList.get(deviceNumber).setReader(String.valueOf(Integer.parseUnsignedInt(filterData[1], 16)));
                     deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[i], 16)));

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,6 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeSerivce = new BluetoothLeService();
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
@@ -81,11 +82,10 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = 0x03;
-                    mBluetoothLeSerivce.writeCharacteristicData(myCommand);
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
                 }
             });
-
         }
     }
 
@@ -132,9 +132,14 @@ public class MyAllViewAdapter extends RecyclerView.Adapter<MyAllViewAdapter.View
         }
     }
 
-    public void updateDeviceData(ArrayList<DeviceData> newDeviceDataList) {
+    public void updateDeviceDataList(ArrayList<DeviceData> newDeviceDataList) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new BleDiffUtilCallbacks(mDeviceDataList, newDeviceDataList));
         diffResult.dispatchUpdatesTo(this);
+        mDeviceDataList = newDeviceDataList;
 
+    }
+
+    public void updateDeviceData(int position) {
+        this.notifyItemChanged(position);
     }
 }

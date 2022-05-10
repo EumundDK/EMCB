@@ -52,7 +52,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
 
     private String nDeviceName;
     private String nDeviceAddress;
-    private BluetoothLeService mBluetoothLeService;
+    public static BluetoothLeService mBluetoothLeService;
     private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     private boolean mConnected = false;
 
@@ -280,28 +280,36 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         int deviceNumber;
         double totalCurrent;
         int duplicateValue;
+        int header;
 
         if (data != null) {
             mRawData.setText(data);
             String[] filterData = data.split(" ");
+            header = Integer.parseUnsignedInt(filterData[0], 16);
             resetDuplicateValue(String.valueOf(Integer.parseUnsignedInt(filterData[1])));
 
-            for(int i = 2; i < (filterData.length - 2); i+=4) {
-                deviceNumber = Integer.parseUnsignedInt(filterData[i], 16);
-                if(deviceNumber > 0 && deviceNumber <= totalTag) {
-                    deviceNumber = deviceNumber - 1;
-                    duplicateValue = deviceDataList.get(deviceNumber).getDuplicate() + 1;
-                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16) * 256, Integer.parseUnsignedInt(filterData[i+3], 16));
+            if(header != 0) {
+                for(int i = 2; i < (filterData.length - 2); i+=4) {
+                    deviceNumber = Integer.parseUnsignedInt(filterData[i], 16);
+                    if(deviceNumber > 0 && deviceNumber <= totalTag) {
+                        deviceNumber = deviceNumber - 1;
+                        duplicateValue = deviceDataList.get(deviceNumber).getDuplicate() + 1;
+                        totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16) * 256, Integer.parseUnsignedInt(filterData[i+3], 16));
 
-                    deviceDataList.get(deviceNumber).setReader(String.valueOf(Integer.parseUnsignedInt(filterData[1], 16)));
-                    deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[i], 16)));
-                    deviceDataList.get(deviceNumber).setStatus(String.valueOf(Integer.parseUnsignedInt(filterData[i + 1], 16)));
-                    deviceDataList.get(deviceNumber).setCurrent(String.valueOf(totalCurrent));
-                    deviceDataList.get(deviceNumber).setDuplicate(duplicateValue);
+                        deviceDataList.get(deviceNumber).setReader(String.valueOf(Integer.parseUnsignedInt(filterData[1], 16)));
+                        deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[i], 16)));
+                        deviceDataList.get(deviceNumber).setStatus(String.valueOf(Integer.parseUnsignedInt(filterData[i + 1], 16)));
+                        deviceDataList.get(deviceNumber).setCurrent(String.valueOf(totalCurrent));
+                        deviceDataList.get(deviceNumber).setDuplicate(duplicateValue);
+                        if(allFragment != null && gridviewFragment != null && listviewFragment != null) {
+                            allFragment.updateTabData(deviceNumber);
+                            gridviewFragment.updateDeviceData(deviceNumber);
+                            listviewFragment.updateTabData(deviceNumber);
+                        }
+                    }
                 }
-            }
-            if(allFragment != null) {
-                allFragment.updateTabData(deviceDataList);
+            } else {
+
             }
         }
     }
@@ -371,11 +379,11 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount());
                     return gridviewFragment;
                 case 2:
-                    listviewFragment = new ListviewFragment();
+                    listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount());
                     return listviewFragment;
                 default:
-                    allFragment = new AllFragment();
-                    return allFragment.newInstance(deviceDataList, getSpanCount());
+                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
+                    return allFragment;
             }
         }
 
@@ -385,5 +393,18 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         }
 
     }
+
+    public void readCharacteristicData() {
+        mBluetoothLeService.readCharacteristicData();
+    }
+
+    public void setCharacteristicNotificationData() {
+        mBluetoothLeService.setCharacteristicNotificationData();
+    }
+    public static void writeCharacteristicData(byte[] value) {
+        mBluetoothLeService.writeCharacteristicData(value);
+    }
+
+
 
 }
