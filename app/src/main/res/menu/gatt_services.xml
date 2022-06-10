@@ -16,13 +16,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <item-->
-<!--        android:id="@+id/menu_refresh"-->
-<!--        android:checkable="false"-->
-<!--        android:orderInCategory="1"-->
-<!--        app:showAsAction="ifRoom"-->
-<!--        android:title="@string/refresh"-->
-<!--        android:icon="@drawable/ic_baseline_refresh_24"/>-->
+    <item
+        android:id="@+id/menu_refresh"
+        android:checkable="false"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"
+        android:title="@string/refresh"
+        android:icon="@drawable/ic_baseline_refresh_24"/>
 
     <item
         android:id="@+id/menu_connect"
@@ -34,6 +34,11 @@
         android:id="@+id/menu_disconnect"
         android:title="@string/menu_disconnect"
         android:orderInCategory="101"
+        app:showAsAction="ifRoom|withText" />
+
+    <item android:id="@+id/menu_readEep"
+        android:title="EEP"
+        android:orderInCategory="2"
         app:showAsAction="ifRoom|withText" />
 
 </menu>

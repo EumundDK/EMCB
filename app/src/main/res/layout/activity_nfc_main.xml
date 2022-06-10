@@ -15,68 +15,70 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/uidCaptionTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/uid"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:typeface="serif"/>
 
             <TextView
                 android:id="@+id/uidTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textSize="12sp"
-                android:typeface="serif"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <Switch
-                android:id="@+id/nfcSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:hint="@string/uidTextViewHint"
                 android:textSize="18sp"
-                android:text="NFC Mode: Auto"
-                android:checked="false"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:text="@string/nfc_tap_mode"/>
-
-                <TextView
-                    android:id="@+id/nfc_mode_change"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="13sp"
-                    android:text="@string/blank"/>
-
-            </LinearLayout>
-
+                android:typeface="serif"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"/>
 
         </LinearLayout>
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <Switch-->
+<!--                android:id="@+id/nfcSwitch"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="18sp"-->
+<!--                android:text="NFC Mode: Auto"-->
+<!--                android:checked="false"/>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="13sp"-->
+<!--                    android:text="@string/nfc_tap_mode"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/nfc_mode_change"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center"-->
+<!--                    android:textSize="13sp"-->
+<!--                    android:text="@string/blank"/>-->
+
+<!--            </LinearLayout>-->
+
+
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 
@@ -85,6 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/uidLayout"
+        android:padding="5dp"
         android:stretchColumns="3">
 
         <TableRow
@@ -96,63 +99,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/current_setting_a"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/semicolon"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="2"/>
 
             <EditText
                 android:id="@+id/currentSettingEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_column="3"
                 android:inputType="numberDecimal"
-                android:hint="1.0 - 40.0"/>
+                android:hint="1.0A - 40.0A"/>
 
+            <CheckBox
+                android:id="@+id/currentSettingCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-
             <TextView
                 android:id="@+id/slaveIdText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/slave_id"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/semicolon"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="2"/>
 
             <EditText
                 android:id="@+id/slaveIdEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_column="3"
                 android:inputType="numberDecimal"
                 android:hint="1 - 100"/>
 
+            <CheckBox
+                android:id="@+id/slaveIdCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
         </TableRow>
 
         <TableRow
@@ -164,29 +172,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:text="@string/cut_off_period_s"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:text="@string/semicolon"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/cutOffPeriodEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
-                android:hint="20 - 300"
+                android:hint="20s - 300s"
                 android:inputType="numberDecimal"
-                android:textSize="20sp"/>
+                android:textSize="14sp"/>
 
+            <CheckBox
+                android:id="@+id/cutOffPeriodCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
         </TableRow>
 
         <TableRow
@@ -198,28 +209,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/on_off_setting"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/semicolon"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="2"/>
 
             <EditText
                 android:id="@+id/onOffSettingEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_column="3"
                 android:inputType="numberDecimal"
                 android:hint="0 - 1"/>
+
+            <CheckBox
+                android:id="@+id/onOffSettingCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
 
         </TableRow>
 
@@ -231,29 +246,33 @@
                 android:id="@+id/autoReconnectText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/auto_reconnect"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:text="@string/auto_connect"
+                android:textSize="18sp"
                 android:layout_column="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/semicolon"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="2"/>
 
             <EditText
                 android:id="@+id/autoReconnectEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_column="3"
                 android:inputType="numberDecimal"
                 android:hint="0 - 1"/>
+
+            <CheckBox
+                android:id="@+id/autoReconnectCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
         </TableRow>
 
         <TableRow
@@ -265,29 +284,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/owner_name"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/semicolon"
-                android:textSize="20sp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:textSize="18sp"
                 android:layout_column="2"/>
 
             <EditText
                 android:id="@+id/ownerNameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:layout_column="3"
                 android:inputType="text"
                 android:maxLength="16"
                 android:hint="DengKai" />
+
+            <CheckBox
+                android:id="@+id/ownerNameCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:layoutDirection="rtl"
+                android:layout_column="4"/>
         </TableRow>
     </TableLayout>
 
@@ -301,21 +324,19 @@
             android:id="@+id/writeMemoryBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="@string/write_memory" />
 
-        <Button
-            android:id="@+id/readMemoryBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/read_memory" />
+<!--        <Button-->
+<!--            android:id="@+id/readMemoryBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:text="@string/read_memory" />-->
 
         <Button
             android:id="@+id/bootloaderBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="@string/nfc_bootloader" />
 
     </LinearLayout>

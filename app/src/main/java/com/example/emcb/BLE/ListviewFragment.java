@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,10 +57,16 @@ public class ListviewFragment extends Fragment {
         myListViewAdapter = new MyListViewAdapter(getContext(), mDeviceDataList);
         recyclerView.setLayoutManager(new LinearLayoutManager((getActivity())));
         recyclerView.setAdapter(myListViewAdapter);
+        SimpleItemAnimator itemAnimator = (SimpleItemAnimator) recyclerView.getItemAnimator();
+        itemAnimator.setSupportsChangeAnimations(false);
         return view;
     }
 
-    public void updateTabData(int position) {
+    public void updateDeviceData(int position) {
         myListViewAdapter.updateDeviceData(position);
+    }
+
+    public void refreshDeviceData() {
+        myListViewAdapter.refreshDeviceData();
     }
 }

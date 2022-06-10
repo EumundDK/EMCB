@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/itemId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(ID)"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NAME"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+            <TextView
+                android:layout_column="1"
+                android:text="Current Setting"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_column="2"
+                android:text=":"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/dialogCurrent"
+                android:layout_column="3"
+                android:textColor="@color/st_light_blue"
+                android:clickable="true"
+                android:text="00.0"
+                android:textSize="20sp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_column="1"
+                android:text="Cut-off Period"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_column="2"
+                android:text=":"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/dialogCutoffPeriod"
+                android:layout_column="3"
+                android:textColor="@color/st_light_blue"
+                android:clickable="true"
+                android:text="0"
+                android:textSize="20sp"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_column="1"
+                android:text="On/Off Setting"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_column="2"
+                android:text=":"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/dialogOnOff"
+                android:layout_column="3"
+                android:text="0"
+                android:textSize="20sp"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_column="1"
+                android:text="Auto Reconnect"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_column="2"
+                android:text=":"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/dialogAutoReconnect"
+                android:layout_column="3"
+                android:text="0"
+                android:textSize="20sp"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_column="1"
+                android:text="Owner Name"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_column="2"
+                android:text=":"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/dialogOwnerName"
+                android:layout_column="3"
+                android:text="-"
+                android:textSize="20sp"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

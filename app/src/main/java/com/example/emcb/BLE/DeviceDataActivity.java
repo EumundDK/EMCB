@@ -198,7 +198,7 @@ public class DeviceDataActivity extends AppCompatActivity {
                 recyclerViewAdapter = new RecyclerViewAdapter(DeviceDataActivity.this, deviceDataList, 1);
                 recyclerView.setAdapter(recyclerViewAdapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(DeviceDataActivity.this, getSpanCount()));
-                mBluetoothLeService.setCharacteristicNotificationData();
+                mBluetoothLeService.setCharacteristicNotificationData(true);
 //                countDownTimer.start();
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 rawData = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);

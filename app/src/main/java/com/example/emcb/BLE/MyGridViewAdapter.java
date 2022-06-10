@@ -1,10 +1,12 @@
 package com.example.emcb.BLE;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +28,31 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
     private static final int selectStatusCheck = 8;
     private static final int onOffStatusCheck = 16;
 
+    private static final int onCmd = 241;
+    private static final int offCmd = 242;
+    private static final int selectCmd = 248;
+    private static final int currentCmd = 250;
+    private static final int cutoffCmd = 251;
+
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
     private final byte[] myCommand = {0x08, 0x00, 0x03};
+    private boolean temp = true;
+
+    CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+        @Override
+        public void onTick(long l) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            temp = true;
+        }
+    };
 
     // data is passed into the constructor
     MyGridViewAdapter(Context context, ArrayList<DeviceData> data) {
@@ -66,7 +87,7 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
         ImageView mStatusOff;
         TextView mCurrent;
         TextView mCurrentSymbolTextView;
-        Button mSwitch;
+        ImageButton mSwitch;
         CardView mCardView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -84,9 +105,11 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     itemSelectedCard = getLayoutPosition();
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
-                    myCommand[2] = 0x03;
+                    myCommand[2] = (byte) selectCmd;
                     DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
+                    temp = false;
+                    countDownTimer.start();
                 }
             });
 
@@ -98,17 +121,19 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
                     if((itemStatus & onOffStatusCheck) == offStatus) {
                         myCommand[1] = itemName;
-                        myCommand[2] = 0x02;
+                        myCommand[2] = (byte) onCmd;
                         DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
                     }
 
                     if((itemStatus & onOffStatusCheck) == onStatus) {
                         myCommand[1] = itemName;
-                        myCommand[2] = 0x01;
+                        myCommand[2] = (byte) offCmd;
                         DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
                     }
+                    temp = false;
+                    countDownTimer.start();
                 }
             });
         }
@@ -146,12 +171,9 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
         }
     }
 
-    //INT & STATUS NOT WORKING
     public void checkStatus(ViewHolder holder, DeviceData readerData, int position) {
-        int itemStatus = Integer.parseUnsignedInt(readerData.getStatus(), 16);
-        if (((itemStatus & selectStatusCheck) == selectStatusCheck) || (position == itemSelectedCard)) {
-            previousItemSelectCard = position;
-            itemSelectedCard = RecyclerView.NO_POSITION;
+        int itemStatus = Integer.parseUnsignedInt(readerData.getStatus());
+        if (((itemStatus & selectStatusCheck) == selectStatusCheck)) {
             holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.light_blue));
         }
 
@@ -163,6 +185,12 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
     }
 
     public void updateDeviceData(int position) {
-        this.notifyItemChanged(position);
+        if(temp) {
+            this.notifyItemChanged(position);
+        }
+    }
+
+    public void refreshDeviceData() {
+            this.notifyDataSetChanged();
     }
 }

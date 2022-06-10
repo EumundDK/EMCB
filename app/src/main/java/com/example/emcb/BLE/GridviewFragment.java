@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,8 @@ public class GridviewFragment extends Fragment {
         myGridViewAdapter = new MyGridViewAdapter(getContext(), mDeviceDataList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mGridCount));
         recyclerView.setAdapter(myGridViewAdapter);
+        SimpleItemAnimator itemAnimator = (SimpleItemAnimator) recyclerView.getItemAnimator();
+        itemAnimator.setSupportsChangeAnimations(false);
 
         return view;
     }
@@ -64,5 +67,9 @@ public class GridviewFragment extends Fragment {
     public void updateDeviceData(int position) {
         myGridViewAdapter.updateDeviceData(position);
 
+    }
+
+    public void refreshDeviceData() {
+        myGridViewAdapter.refreshDeviceData();
     }
 }

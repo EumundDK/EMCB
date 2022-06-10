@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:layout_margin="4dp"
+        android:clickable="false"
+        app:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp">
+
+            <TextView
+                android:id="@+id/itemNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/itemDeviceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device"
+                android:textSize="24sp"
+                android:layout_toEndOf="@id/itemNameTextView"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/itemCurrentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00.0"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_toStartOf="@id/currentSymbolTextView"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/currentSymbolTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textSize="24sp"
+                android:layout_toStartOf="@id/itemStatusOnOff"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:id="@+id/itemStatusOnOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_circle_grey_24"
+                android:layout_toStartOf="@id/onOffButton"
+                android:layout_centerInParent="true"/>
+
+            <ImageButton
+                android:id="@+id/onOffButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/bright_grey"
+                android:src="@drawable/ic_baseline_power_settings_new_24"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
+
+

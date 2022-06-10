@@ -57,11 +57,13 @@ public class BluetoothLeService extends Service {
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE = "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA = "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String ACTION_EEP_DATA_AVAILABLE = "com.example.bluetooth.le.ACTION_EEP_DATA_AVAILABLE";
+    public final static String EEP_DATA = "com.example.bluetooth.le.EEP_DATA";
 
     public final static UUID BOSS_STREADER_CUSTOM_SERVICE_UUID = UUID.fromString("36a125be-49c7-462f-8e34-8d5b9dc883ea");
     public final static UUID BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID = UUID.fromString("44122a22-fc66-48e6-92c8-7d02cc9d16fd");
     public final static UUID BOSS_STREADER_WRITE_CUSTOM_CHAR_UUID = UUID.fromString("3dad49ff-61f8-4c7c-a474-74ad70b7c81a");
-    public final static UUID BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID = UUID.fromString("3dad49ff-61f8-4c7c-a474-74ad70b7c81a");
+    public final static UUID BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID = UUID.fromString("6a26d1e2-e8b5-438a-b9f7-a470cdc58ff2"); //3dad49ff-61f8-4c7c-a474-74ad70b7c81a
 
     public final static UUID CUSTOM_SERVICE_UUID = UUID.fromString("76e9bc2f-61d8-4676-a50c-29dba51b5dd1");
     public final static UUID CUSTOM_CHAR_UUID = UUID.fromString("11111111-ea4a-47d2-bf2a-cb2b1959fbd2");
@@ -110,7 +112,23 @@ public class BluetoothLeService extends Service {
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            if (characteristic.getUuid().equals(BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID)) {
+                broadcastUpdate(ACTION_EEP_DATA_AVAILABLE, characteristic);
+            }
+
+            if(characteristic.getUuid().equals(BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID)) {
+                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            }
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            if(descriptor.getCharacteristic().getUuid().equals(BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID)) {
+                setEepCharacteristicNotificationData(true);
+            } else if (BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID.equals(descriptor.getCharacteristic().getUuid())) {
+                byte[] eepCmd = {0x41};
+                writeEepCharacteristicData(eepCmd);
+            }
         }
     };
 
@@ -123,12 +141,22 @@ public class BluetoothLeService extends Service {
         final Intent intent = new Intent(action);
         // For all other profiles, writes the data formatted in HEX.
         final byte[] data = characteristic.getValue();
-        if (data != null && data.length > 0) {
-            final StringBuilder stringBuilder = new StringBuilder(data.length);
-            for(byte byteChar : data)
-                stringBuilder.append(String.format("%02X ", byteChar));
-            //intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
-            intent.putExtra(EXTRA_DATA, stringBuilder.toString());
+        if(characteristic.getUuid().equals(BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID)) {
+            if (data != null && data.length > 1) {
+                final StringBuilder stringBuilder = new StringBuilder(data.length);
+                for(byte byteChar : data)
+                    stringBuilder.append(String.format("%02X ", byteChar));
+                //intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+                intent.putExtra(EEP_DATA, stringBuilder.toString());
+            }
+        } else if (characteristic.getUuid().equals(BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID)) {
+            if (data != null && data.length > 0) {
+                final StringBuilder stringBuilder = new StringBuilder(data.length);
+                for(byte byteChar : data)
+                    stringBuilder.append(String.format("%02X ", byteChar));
+                //intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+                intent.putExtra(EXTRA_DATA, stringBuilder.toString());
+            }
         }
         sendBroadcast(intent);
     }
@@ -290,26 +318,73 @@ public class BluetoothLeService extends Service {
     }
 
     public void readCharacteristicData() {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
         BluetoothGattService mServiceData = mBluetoothGatt.getService(CUSTOM_SERVICE_UUID);
         BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(CUSTOM_CHAR_UUID);
         mBluetoothGatt.readCharacteristic(mCharData);
 
     }
 
-    public void setCharacteristicNotificationData() {
+    public void setCharacteristicNotificationData(boolean notify) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
         BluetoothGattService mServiceData = mBluetoothGatt.getService(BOSS_STREADER_CUSTOM_SERVICE_UUID);
         BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(BOSS_STREADER_NOTIFY_CUSTOM_CHAR_UUID);
-        mBluetoothGatt.setCharacteristicNotification(mCharData, true);
+        mBluetoothGatt.setCharacteristicNotification(mCharData, notify);
 
         BluetoothGattDescriptor descriptor = mCharData.getDescriptor(UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        mBluetoothGatt.writeDescriptor(descriptor);
-
+        boolean isSuccess = mBluetoothGatt.writeDescriptor(descriptor);
     }
 
     public void writeCharacteristicData(byte[] value) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
         BluetoothGattService mServiceData = mBluetoothGatt.getService(BOSS_STREADER_CUSTOM_SERVICE_UUID);
         BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(BOSS_STREADER_WRITE_CUSTOM_CHAR_UUID);
+        mCharData.setValue(value);
+        mBluetoothGatt.writeCharacteristic(mCharData);
+    }
+
+    public void setEepCharacteristicNotificationData(boolean notify) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        BluetoothGattService mServiceData = mBluetoothGatt.getService(BOSS_STREADER_CUSTOM_SERVICE_UUID);
+        BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID);
+        mBluetoothGatt.setCharacteristicNotification(mCharData, notify);
+
+        BluetoothGattDescriptor descriptor = mCharData.getDescriptor(UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        boolean isSuccess = mBluetoothGatt.writeDescriptor(descriptor);
+
+    }
+
+    public void readEepCharacteristicData() {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        BluetoothGattService mServiceData = mBluetoothGatt.getService(BOSS_STREADER_CUSTOM_SERVICE_UUID);
+        BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID);
+        mBluetoothGatt.readCharacteristic(mCharData);
+    }
+
+    public void writeEepCharacteristicData(byte[] value) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        BluetoothGattService mServiceData = mBluetoothGatt.getService(BOSS_STREADER_CUSTOM_SERVICE_UUID);
+        BluetoothGattCharacteristic mCharData = mServiceData.getCharacteristic(BOSS_STREADER_NOTIFY_WRITE_EEP_CUSTOM_CHAR_UUID);
         mCharData.setValue(value);
         mBluetoothGatt.writeCharacteristic(mCharData);
     }

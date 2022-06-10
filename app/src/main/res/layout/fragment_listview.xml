@@ -10,11 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fragment LIST"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gridRecyclerView"
             android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -41,12 +42,23 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
+    private byte[] getEepData = {0x41};
+    private final int currentPtr = 1;
+    private final int idPtr = 3;
+    private final int cutoffPtr = 5;
+    private final int onOffPtr = 7;
+    private final int autoConnPtr = 8;
+    private final int ownerPtr = 9;
+
+    private int EepOn = 0;
+
     private ArrayList<String> existingReader;
     private ArrayList<DeviceData> deviceDataList;
     private int totalTag = 100;
 
     private TextView mConnectionState;
     private TextView mRawData;
+    private TextView mEepData;
     private TextView mDeviceAddress;
     private TextView mDeviceName;
 
@@ -64,6 +76,24 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     GridviewFragment gridviewFragment;
     ListviewFragment listviewFragment;
 
+    CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+        @Override
+        public void onTick(long l) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            if(gridviewFragment != null) {
+                gridviewFragment.refreshDeviceData();
+            }
+            if(listviewFragment != null) {
+                listviewFragment.refreshDeviceData();
+            }
+            countDownTimer.start();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +110,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         mDeviceAddress = findViewById(R.id.device_address);
         mConnectionState = findViewById(R.id.connection_state);
         mRawData = findViewById(R.id.gatt_services_raw_data);
+        mEepData = findViewById(R.id.gatt_services_eep_data);
 
         mDeviceName.setText(nDeviceName);
         mDeviceAddress.setText(nDeviceAddress);
@@ -96,13 +127,13 @@ public class DeviceDataTabActivity extends AppCompatActivity {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch(position) {
+//                    case 0:
+//                        tab.setText("All");
+//                        break;
                     case 0:
-                        tab.setText("All");
-                        break;
-                    case 1:
                         tab.setIcon(R.drawable.ic_baseline_grid_view_24);
                         break;
-                    case 2:
+                    case 1:
                         tab.setIcon(R.drawable.ic_baseline_view_list_24);
                         break;
                 }
@@ -158,13 +189,25 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.menu_refresh:
+                if(gridviewFragment != null) {
+                    gridviewFragment.refreshDeviceData();
+                }
+                if(listviewFragment != null) {
+                    listviewFragment.refreshDeviceData();
+                }
+                break;
+            case R.id.menu_readEep:
+                if(listviewFragment != null) {
+                    clearUI();
+                    writeEepData(getEepData);
+                }
+                break;
             case R.id.menu_connect:
                 mBluetoothLeService.connect(nDeviceAddress);
-                mConnected = true;
                 return true;
             case R.id.menu_disconnect:
                 mBluetoothLeService.disconnect();
-                mConnected = false;
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -210,9 +253,12 @@ public class DeviceDataTabActivity extends AppCompatActivity {
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
-                mBluetoothLeService.setCharacteristicNotificationData();
+                mBluetoothLeService.setCharacteristicNotificationData(true);
+                countDownTimer.start();
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 updateData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+            } else if (BluetoothLeService.ACTION_EEP_DATA_AVAILABLE.equals(action)) {
+                updateEepData(intent.getStringExtra(BluetoothLeService.EEP_DATA));
             }
         }
     };
@@ -228,6 +274,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
 
     private void clearUI() {
         mRawData.setText(R.string.no_data);
+        mEepData.setText(R.string.no_data);
     }
 
     private void displayGattServices(List<BluetoothGattService> gattServices) {
@@ -273,6 +320,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLeService.ACTION_EEP_DATA_AVAILABLE);
         return intentFilter;
     }
 
@@ -294,34 +342,71 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     if(deviceNumber > 0 && deviceNumber <= totalTag) {
                         deviceNumber = deviceNumber - 1;
                         duplicateValue = deviceDataList.get(deviceNumber).getDuplicate() + 1;
-                        totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16) * 256, Integer.parseUnsignedInt(filterData[i+3], 16));
+                        totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16), Integer.parseUnsignedInt(filterData[i+3], 16));
 
                         deviceDataList.get(deviceNumber).setReader(String.valueOf(Integer.parseUnsignedInt(filterData[1], 16)));
                         deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[i], 16)));
                         deviceDataList.get(deviceNumber).setStatus(String.valueOf(Integer.parseUnsignedInt(filterData[i + 1], 16)));
                         deviceDataList.get(deviceNumber).setCurrent(String.valueOf(totalCurrent));
                         deviceDataList.get(deviceNumber).setDuplicate(duplicateValue);
-                        if(allFragment != null && gridviewFragment != null && listviewFragment != null) {
-                            allFragment.updateTabData(deviceNumber);
+                        if(gridviewFragment != null) {
                             gridviewFragment.updateDeviceData(deviceNumber);
-                            listviewFragment.updateTabData(deviceNumber);
+                        }
+                        if(listviewFragment != null) {
+                            listviewFragment.updateDeviceData(deviceNumber);
                         }
                     }
                 }
-            } else {
-
             }
         }
     }
 
+    public void updateEepData(String data) {
+        int deviceNumber;
+        double totalCurrent;
+        int totalPeriod;
+        int header;
+
+        if (data != null) {
+            mEepData.setText(data);
+            String[] filterData = data.split(" ");
+            header = Integer.parseUnsignedInt(filterData[0], 16);
+
+            if(header == 0) {
+                deviceNumber = Integer.parseUnsignedInt(filterData[idPtr], 16);
+                if(deviceNumber > 0 && deviceNumber <= totalTag) {
+                    deviceNumber = deviceNumber - 1;
+                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[currentPtr], 16), Integer.parseUnsignedInt(filterData[currentPtr + 1], 16));
+                    totalPeriod = calculateTotalPeriod(Integer.parseUnsignedInt(filterData[cutoffPtr], 16), Integer.parseUnsignedInt(filterData[cutoffPtr + 1], 16));
+
+                    deviceDataList.get(deviceNumber).setCurrentSetting(totalCurrent);
+                    deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[idPtr], 16)));
+                    deviceDataList.get(deviceNumber).setCutoffPeriod(totalPeriod);
+                    deviceDataList.get(deviceNumber).setOnOffSetting(Integer.parseUnsignedInt(filterData[onOffPtr], 16));
+                    deviceDataList.get(deviceNumber).setAutoReconnect(Integer.parseUnsignedInt(filterData[autoConnPtr], 16));
+                    deviceDataList.get(deviceNumber).setOwnerName(String.valueOf(Integer.parseUnsignedInt(filterData[ownerPtr], 16)));
+                }
+            }
+        }
+
+    }
+
     private void initialiseData() {
         for(int i = 0; i < totalTag; i++) {
+            //GRID VIEW
             DeviceData mDeviceData = new DeviceData();
             mDeviceData.setReader(String.valueOf(0));
             mDeviceData.setName(String.valueOf(i + 1));
             mDeviceData.setStatus(String.valueOf(64));
             mDeviceData.setCurrent(getString(R.string.blank));
             mDeviceData.setDuplicate(0);
+            //LIST VIEW
+            mDeviceData.setCurrentSetting(0.0);
+            mDeviceData.setCutoffPeriod(0);
+            mDeviceData.setOnOffSetting(0);
+            mDeviceData.setAutoReconnect(0);
+            mDeviceData.setOwnerName("");
+
             deviceDataList.add(mDeviceData);
         }
     }
@@ -340,11 +425,21 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     private double calculateTotalCurrent(int current1, int current2) {
         double totalCurrent;
         double maxCurrent = 99.9;
-        totalCurrent = ((current1 + current2) / 10.0);
+        totalCurrent = ((current1 + (current2 * 256)) / 10.0);
         if(totalCurrent > maxCurrent) {
-            totalCurrent = 99.9;
+            totalCurrent = maxCurrent;
         }
         return totalCurrent;
+    }
+
+    private int calculateTotalPeriod(int period1, int period2) {
+        int totalPeriod;
+        int maxPeriod = 300;
+        totalPeriod = (period1 + (period2 * 256));
+        if(totalPeriod > maxPeriod) {
+            totalPeriod = maxPeriod;
+        }
+        return totalPeriod;
     }
 
     public int getSpanCount() {
@@ -372,24 +467,23 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
 
             switch (position) {
+//                case 0:
+//                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
+//                    return allFragment;
                 case 0:
-                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
-                    return allFragment;
-                case 1:
                     gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount());
                     return gridviewFragment;
-                case 2:
+                case 1:
                     listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount());
                     return listviewFragment;
                 default:
-                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
-                    return allFragment;
+                    return null;
             }
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 2;
         }
 
     }
@@ -398,11 +492,24 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         mBluetoothLeService.readCharacteristicData();
     }
 
-    public void setCharacteristicNotificationData() {
-        mBluetoothLeService.setCharacteristicNotificationData();
-    }
     public static void writeCharacteristicData(byte[] value) {
         mBluetoothLeService.writeCharacteristicData(value);
+    }
+
+    public void setCharacteristicNotificationData(boolean notify) {
+        mBluetoothLeService.setCharacteristicNotificationData(notify);
+    }
+
+    public static void readEepData() {
+        mBluetoothLeService.readEepCharacteristicData();
+    }
+
+    public static void writeEepData(byte[] value) {
+        mBluetoothLeService.writeEepCharacteristicData(value);
+    }
+
+    public static void setEepNotificationData(boolean notify) {
+        mBluetoothLeService.setEepCharacteristicNotificationData(notify);
     }
 
 

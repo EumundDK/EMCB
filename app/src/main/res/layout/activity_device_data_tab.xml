@@ -54,13 +54,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_data"
-            android:textSize="12sp"/>
+            android:textSize="8sp"/>
 
         <TextView
             android:id="@+id/gatt_services_raw_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="8sp"
+            android:text="@string/no_data"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EEP :"
+            android:textSize="8sp"/>
+
+        <TextView
+            android:id="@+id/gatt_services_eep_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8sp"
             android:text="@string/no_data"/>
 
     </LinearLayout>

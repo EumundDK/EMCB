@@ -7,7 +7,7 @@
     <string name="slave_id">Slave ID</string>
     <string name="cut_off_period">Cut-off Period</string>
     <string name="on_off_setting">On/Off Setting</string>
-    <string name="auto_reconnect">Auto Reconnect</string>
+    <string name="auto_connect">Auto Connect</string>
     <string name="owner_name">Owner Name</string>
     <string name="nfc_bootloader">NFC Bootloader</string>
     <string name="read_memory">Read Memory</string>
@@ -99,6 +99,7 @@
     <string name="nfc_tap_mode">NFC Tap Mode</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="current_setting_a">Current Setting (A)</string>
-    <string name="cut_off_period_s">Cut-off Period (s)</string>
+    <string name="current_setting_a">Current Setting</string>
+    <string name="cut_off_period_s">Cut-off Period</string>
+    <string name="uidTextViewHint">TAP NFC TO READ DATA</string>
 </resources>
