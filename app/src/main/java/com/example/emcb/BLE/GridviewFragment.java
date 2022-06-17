@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +32,11 @@ public class GridviewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GridviewFragment newInstance(ArrayList<DeviceData> deviceDataList, int gridCount) {
+    public static GridviewFragment newInstance(ArrayList<DeviceData> deviceDataList) {
         GridviewFragment fragment = new GridviewFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(DEVICE_DATA_LIST, deviceDataList);
-        args.putInt(GRID_COUNT, gridCount);
+//        args.putInt(GRID_COUNT, gridCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,9 +44,12 @@ public class GridviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        int columnWidth = Math.round(displayMetrics.widthPixels / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        mGridCount = DeviceDataTabActivity.getSpanCount(columnWidth);
         if(getArguments() != null) {
             mDeviceDataList = getArguments().getParcelableArrayList(DEVICE_DATA_LIST);
-            mGridCount = getArguments().getInt(GRID_COUNT);
+//            mGridCount = getArguments().getInt(GRID_COUNT);
         }
     }
 

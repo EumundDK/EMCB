@@ -63,15 +63,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_circle_grey_24"
-                android:layout_toStartOf="@id/onOffButton"
+                android:layout_toStartOf="@id/onButton"
                 android:layout_centerInParent="true"/>
 
-            <ImageButton
-                android:id="@+id/onOffButton"
+<!--            <ImageButton-->
+<!--                android:id="@+id/onOffButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:backgroundTint="@color/bright_grey"-->
+<!--                android:src="@drawable/ic_baseline_power_settings_new_24"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_centerInParent="true"/>-->
+
+            <Button
+                android:id="@+id/onButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/bright_grey"
-                android:src="@drawable/ic_baseline_power_settings_new_24"
+                android:minWidth="1dp"
+                android:backgroundTint="@color/green"
+                android:text="ON"
+                android:textColor="@color/black"
+                android:layout_toStartOf="@id/offButton"
+                android:layout_centerInParent="true"/>
+
+            <Button
+                android:id="@+id/offButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="1dp"
+                android:backgroundTint="@color/red"
+                android:text="OFF"
+                android:textColor="@color/black"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"/>
 

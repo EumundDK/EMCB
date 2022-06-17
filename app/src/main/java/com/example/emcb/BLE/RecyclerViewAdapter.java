@@ -107,7 +107,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView mStatusOff;
         TextView mCurrent;
         TextView mCurrentSymbolTextView;
-        Button mSwitch;
+//        Button mOnSwitch;
+//        Button mOffSwitch;
         CardView mCardView;
 
 //        LinearLayout extraDetailsLayout;
@@ -138,30 +139,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
 
-            if(type != 0) {
-                mSwitch = itemView.findViewById(R.id.onOffSwitch);
-                mSwitch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int itemSelectedSwitch = getLayoutPosition();
-                        byte itemStatus = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getStatus());
-                        byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
-                        if((itemStatus & onOffStatusCheck) == offStatus) {
-                            myCommand[1] = itemName;
-                            myCommand[2] = (byte) onCmd;
-                            mBluetoothLeService.writeCharacteristicData(myCommand);
-                            Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
-                        }
-
-                        if((itemStatus & onOffStatusCheck) == onStatus) {
-                            myCommand[1] = itemName;
-                            myCommand[2] = (byte) offCmd;
-                            mBluetoothLeService.writeCharacteristicData(myCommand);
-                            Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+//            if(type != 0) {
+//                mOnSwitch = itemView.findViewById(R.id.onSwitch);
+//                mOnSwitch.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        int itemSelectedSwitch = getLayoutPosition();
+//                        byte itemStatus = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getStatus());
+//                        byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
+//                        if((itemStatus & onOffStatusCheck) == offStatus) {
+//                            myCommand[1] = itemName;
+//                            myCommand[2] = (byte) onCmd;
+//                            mBluetoothLeService.writeCharacteristicData(myCommand);
+//                            Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
+//                        }
+//
+//                        if((itemStatus & onOffStatusCheck) == onStatus) {
+//                            myCommand[1] = itemName;
+//                            myCommand[2] = (byte) offCmd;
+//                            mBluetoothLeService.writeCharacteristicData(myCommand);
+//                            Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//            }
 
 //            if(mHasExtraData) {
 //                extraDetailsLayout = itemView.findViewById(R.id.extraDetailLayout);
@@ -199,7 +200,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_12));
             holder.mCurrent.setText(R.string.blank);
             holder.itemView.setClickable(false);
-            holder.mSwitch.setClickable(false);
+//            holder.mOnSwitch.setClickable(false);
+//            holder.mOffSwitch.setClickable(false);
             return false;
         } else if(readerData.getDuplicate() > 1) {// DUPE DATA ERROR
             holder.mCurrent.setText("Err");
@@ -207,7 +209,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.light_red));
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_12));
             holder.itemView.setClickable(true);
-            holder.mSwitch.setClickable(false);
+//            holder.mOnSwitch.setClickable(false);
+//            holder.mOffSwitch.setClickable(false);
             return true;
         } else {
             if(position != previousItemSelectCard) { //GOOD DATA NOT PREVIOUSLY SELECTED
@@ -215,7 +218,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
             holder.mCurrentSymbolTextView.setVisibility(View.VISIBLE);
             holder.itemView.setClickable(true);
-            holder.mSwitch.setClickable(true);
+//            holder.mOnSwitch.setClickable(true);
+//            holder.mOffSwitch.setClickable(true);
             return true;
         }
     }

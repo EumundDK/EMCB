@@ -1,6 +1,8 @@
 package com.example.emcb.BLE;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
     private static final int cutoffCmd = 251;
 
     private LayoutInflater mInflater;
+    private Context mContext;
     private ArrayList<DeviceData> mDeviceDataList;
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
@@ -58,6 +61,7 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
     MyGridViewAdapter(Context context, ArrayList<DeviceData> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceDataList = data;
+        this.mContext = context;
     }
 
     @NonNull
@@ -88,6 +92,8 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
         TextView mCurrent;
         TextView mCurrentSymbolTextView;
         ImageButton mSwitch;
+//        ImageButton mOnSwitch;
+//        ImageButton mOffSwitch;
         CardView mCardView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -97,21 +103,32 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
             mCurrent = itemView.findViewById(R.id.itemCurrentTextView);
             mCurrentSymbolTextView = itemView.findViewById(R.id.currentSymbolTextView);
             mSwitch = itemView.findViewById(R.id.onOffSwitch);
+//            mOnSwitch = itemView.findViewById(R.id.onSwitch);
+//            mOffSwitch = itemView.findViewById(R.id.offSwitch);
             mCardView = itemView.findViewById(R.id.card_view);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     itemSelectedCard = getLayoutPosition();
-                    notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = (byte) selectCmd;
                     DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
+                    notifyItemChanged(itemSelectedCard);
                     temp = false;
                     countDownTimer.start();
                 }
             });
+
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    itemSelectedCard = getLayoutPosition();
+//                    notifyItemChanged(itemSelectedCard);
+//                    controlDialog(itemSelectedCard);
+//                }
+//            });
 
             mSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,6 +141,9 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                         myCommand[2] = (byte) onCmd;
                         DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
+                        mDeviceDataList.get(itemSelectedSwitch).setStatus(String.valueOf(onStatus));
+                        notifyItemChanged(itemSelectedSwitch);
+
                     }
 
                     if((itemStatus & onOffStatusCheck) == onStatus) {
@@ -131,11 +151,41 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                         myCommand[2] = (byte) offCmd;
                         DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
+                        mDeviceDataList.get(itemSelectedSwitch).setStatus(String.valueOf(offStatus));
+                        notifyItemChanged(itemSelectedSwitch);
                     }
                     temp = false;
                     countDownTimer.start();
                 }
             });
+
+//            mOnSwitch.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int itemSelectedSwitch = getLayoutPosition();
+//                    byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
+//                    myCommand[1] = itemName;
+//                    myCommand[2] = (byte) onCmd;
+//                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
+//                    Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
+//                    temp = false;
+//                    countDownTimer.start();
+//                }
+//            });
+//
+//            mOffSwitch.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int itemSelectedSwitch = getLayoutPosition();
+//                    byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
+//                    myCommand[1] = itemName;
+//                    myCommand[2] = (byte) offCmd;
+//                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
+//                    Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
+//                    temp = false;
+//                    countDownTimer.start();
+//                }
+//            });
         }
     }
 

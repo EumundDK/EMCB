@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="70dp"
-    android:layout_height="70dp"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
@@ -30,7 +30,7 @@
                     android:id="@+id/itemNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/blank"
+                    android:text="100"
                     android:textStyle="bold"
                     android:textSize="12sp" />
 
@@ -45,8 +45,24 @@
                     android:id="@+id/onOffSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_power_settings_new_8"
+                    android:src="@drawable/ic_baseline_power_settings_new_16"
                     android:backgroundTint="@color/st_light_grey" />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/itemCurrentTextView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="99.9"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/currentSymbolTextView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="A"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_gravity="bottom"/>-->
 
             </LinearLayout>
 
@@ -58,12 +74,30 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
+<!--                <ImageButton-->
+<!--                    android:id="@+id/onSwitch"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:src="@drawable/ic_baseline_power_settings_new_8"-->
+<!--                    android:backgroundTint="@color/green"-->
+<!--                    android:visibility="invisible"/>-->
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/offSwitch"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:src="@drawable/ic_baseline_power_settings_new_8"-->
+<!--                    android:backgroundTint="@color/red"-->
+<!--                    android:visibility="invisible"/>-->
+
                 <TextView
                     android:id="@+id/itemCurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="99.9"
-                    android:textSize="20sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -71,18 +105,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:layout_gravity="bottom"/>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/Linear3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/Linear2"
-                android:orientation="horizontal"
-                android:gravity="center">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/Linear3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/Linear2"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center">-->
 
 <!--                <Switch-->
 <!--                    android:id="@+id/onOffSwitch"-->
@@ -90,7 +124,7 @@
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:switchMinWidth="65dp"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
         </RelativeLayout>
 

@@ -1,8 +1,10 @@
+
 package com.example.emcb.BLE;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +47,22 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
-//    private final byte[] myCommand = {0x08, 0x00, 0x03};
+    private final byte[] myCommand = {0x08, 0x00, 0x03};
 //    private final byte[] myCommand2 = {0x08, 0x00, 0x03, 0x00, 0x00};
     private byte[] myEEPCommand = {0x08, 0x00, 0x4E, 0x00, 0x00};
+    private boolean temp = true;
+
+    CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+        @Override
+        public void onTick(long l) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            temp = true;
+        }
+    };
 
     MyListViewAdapter(Context context, ArrayList<DeviceData> data) {
         this.mInflater = LayoutInflater.from(context);
@@ -83,7 +98,9 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
         TextView mDeviceName;
         TextView mCurrent;
         CardView mCardView;
-        ImageButton mButton;
+//        ImageButton mButton;
+        Button mOnSwitch;
+        Button mOffSwitch;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,8 +109,9 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
             mDeviceName = itemView.findViewById(R.id.itemDeviceName);
             mCurrent = itemView.findViewById(R.id.itemCurrentTextView);
             mCardView = itemView.findViewById(R.id.card_view);
-            mButton = itemView.findViewById(R.id.onOffButton);
-
+//            mButton = itemView.findViewById(R.id.onOffButton);
+            mOnSwitch = itemView.findViewById(R.id.onButton);
+            mOffSwitch = itemView.findViewById(R.id.offButton);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,6 +119,34 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
                     itemSelectedCard = getLayoutPosition();
                     notifyItemChanged(itemSelectedCard);
                     deviceSelection(itemSelectedCard);
+                }
+            });
+
+            mOnSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int itemSelectedSwitch = getLayoutPosition();
+                    byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
+                    myCommand[1] = itemName;
+                    myCommand[2] = (byte) onCmd;
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
+                    Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
+                    temp = false;
+                    countDownTimer.start();
+                }
+            });
+
+            mOffSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int itemSelectedSwitch = getLayoutPosition();
+                    byte itemName = Byte.parseByte(mDeviceDataList.get(itemSelectedSwitch).getName());
+                    myCommand[1] = itemName;
+                    myCommand[2] = (byte) offCmd;
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
+                    Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
+                    temp = false;
+                    countDownTimer.start();
                 }
             });
         }
@@ -116,18 +162,24 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_24));
             holder.mCurrent.setText(R.string.blank);
             holder.itemView.setClickable(false);
+            holder.mOnSwitch.setVisibility(View.INVISIBLE);
+            holder.mOffSwitch.setVisibility(View.INVISIBLE);
             return false;
         } else if(readerData.getDuplicate() == 1) {
             if(position != previousItemSelectCard) { //GOOD DATA NOT PREVIOUSLY SELECTED
                 holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.white));
             }
             holder.itemView.setClickable(true);
+            holder.mOnSwitch.setVisibility(View.VISIBLE);
+            holder.mOffSwitch.setVisibility(View.VISIBLE);
             return true;
         } else { // DUPE DATA ERROR
             holder.mCurrent.setText("Err");
             holder.mCardView.setCardBackgroundColor(mInflater.getContext().getColor(R.color.light_red));
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_grey_24));
             holder.itemView.setClickable(true);
+            holder.mOnSwitch.setVisibility(View.INVISIBLE);
+            holder.mOffSwitch.setVisibility(View.INVISIBLE);
             return true;
         }
     }
@@ -136,8 +188,14 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
         int itemStatus = Integer.parseUnsignedInt(readerData.getStatus(), 16);
         if ((itemStatus & onOffStatusCheck) == onStatus) {
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_green_24));
+            holder.mOnSwitch.setBackgroundTintList(mInflater.getContext().getColorStateList(R.color.button_color_on));
+            holder.mOffSwitch.setBackgroundTintList(mInflater.getContext().getColorStateList(R.color.button_color_default));
+
         } else if ((itemStatus & onOffStatusCheck) == offStatus) {
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_red_24));
+
+            holder.mOffSwitch.setBackgroundTintList(mInflater.getContext().getColorStateList(R.color.button_color_off));
+            holder.mOnSwitch.setBackgroundTintList(mInflater.getContext().getColorStateList(R.color.button_color_default));
         }
     }
 

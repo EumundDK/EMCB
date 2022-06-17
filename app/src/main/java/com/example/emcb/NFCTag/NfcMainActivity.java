@@ -428,6 +428,7 @@ public class NfcMainActivity extends AppCompatActivity implements TagDiscovery.o
                             currentConvert =  Double.parseDouble(mCurrentSettingCheckBox.getText().toString());
                         }
                         currentSetting = (int) (currentConvert * 10);
+
                         if(currentSetting < 256) {
                             writeData[CURRENT_SETTING] = (byte) currentSetting;
                             writeData[CURRENT_SETTING + 1] = 0;
@@ -435,13 +436,20 @@ public class NfcMainActivity extends AppCompatActivity implements TagDiscovery.o
                             writeData[CURRENT_SETTING] = (byte) (currentSetting % 256);
                             writeData[CURRENT_SETTING + 1] = (byte) (currentSetting / 256);
                         }
-                        slaveId = Integer.parseInt(mSlaveIdEdit.getText().toString());
+
+                        if(mSlaveIdEdit.isEnabled()) {
+                            slaveId = Integer.parseInt(mSlaveIdEdit.getText().toString());
+                        } else {
+                            slaveId = Integer.parseInt(mSlaveIdCheckBox.getText().toString());
+                        }
                         writeData[SLAVE_ID] = (byte) slaveId;
+
                         if(mCutoffPeriodEdit.isEnabled()) {
                             cutoffPeriod = Integer.parseInt(mCutoffPeriodEdit.getText().toString());
                         } else {
                             cutoffPeriod = Integer.parseInt(mCutoffPeriodCheckBox.getText().toString());
                         }
+
                         if(cutoffPeriod < 256) {
                             writeData[CUTOFF_PERIOD] = (byte) cutoffPeriod;
                             writeData[CUTOFF_PERIOD + 1] = 0;
@@ -449,23 +457,27 @@ public class NfcMainActivity extends AppCompatActivity implements TagDiscovery.o
                             writeData[CUTOFF_PERIOD] = (byte) (cutoffPeriod % 256);
                             writeData[CUTOFF_PERIOD + 1] = (byte) (cutoffPeriod / 256);
                         }
+
                         if(mOnOffSettingEdit.isEnabled()) {
                             onOffSetting = Integer.parseInt(mOnOffSettingEdit.getText().toString());
                         } else {
                             onOffSetting = Integer.parseInt(mOnOffSettingCheckBox.getText().toString());
                         }
                         writeData[ONOFF_SETTING] = (byte) onOffSetting;
+
                         if(mAutoReconnectEdit.isEnabled()) {
                             autoReconnect = Integer.parseInt(mAutoReconnectEdit.getText().toString());
                         } else {
                             autoReconnect = Integer.parseInt(mAutoReconnectCheckBox.getText().toString());
                         }
                         writeData[AUTO_RECONNECT] = (byte) autoReconnect;
+
                         if(mOwnerNameEdit.isEnabled()) {
                             ownerName = charset.encode(mOwnerNameEdit.getText().toString()).array();
                         } else {
                             ownerName = charset.encode(mOwnerNameCheckBox.getText().toString()).array();
                         }
+
                         if(mST25DVTag.isMailboxEnabled(true)) {
                             mST25DVTag.disableMailbox();
                         }
@@ -511,8 +523,8 @@ public class NfcMainActivity extends AppCompatActivity implements TagDiscovery.o
                             mCutoffPeriodEdit.setText(String.valueOf(cutoffPeriod));
                             mOnOffSettingEdit.setText(String.valueOf(onOffSetting));
                             mAutoReconnectEdit.setText(String.valueOf(autoReconnect));
-                            if(ownerName[0] != 0 || ownerName[0] != 0xFF) {
-                                mOwnerNameEdit.setText(ownerNameText);
+                            if(ownerName[0] == 0 || ownerName[0] == 0xFF) {
+                                mOwnerNameEdit.getText().clear();
                             }
                             Toast.makeText(NfcMainActivity.this, "Read successful", Toast.LENGTH_LONG).show();
                             break;
@@ -523,16 +535,7 @@ public class NfcMainActivity extends AppCompatActivity implements TagDiscovery.o
                             } else if ((currentSlaveID > 100)) {
                                 currentSlaveID = 1;
                             }
-                            if(!mSlaveIdEdit.isEnabled()) {
-                                checkSlaveID = Integer.parseInt(mSlaveIdCheckBox.getText().toString());
-                                if((checkSlaveID < 100)) {
-                                    checkSlaveID = checkSlaveID + 1; //Increment by 1 when write OK
-                                } else if ((checkSlaveID > 100)) {
-                                    checkSlaveID = 1;
-                                }
-                            }
                             mSlaveIdEdit.setText(String.valueOf(currentSlaveID));
-                            mSlaveIdCheckBox.setText(String.valueOf(checkSlaveID));
 
                             Toast.makeText(NfcMainActivity.this, "Write successful", Toast.LENGTH_LONG).show();
                             break;

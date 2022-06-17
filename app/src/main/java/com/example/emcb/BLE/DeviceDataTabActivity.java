@@ -30,6 +30,7 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     private final int onOffPtr = 7;
     private final int autoConnPtr = 8;
     private final int ownerPtr = 9;
+    private final int ownerNameSize = 15;
 
     private int EepOn = 0;
 
@@ -120,7 +122,6 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager);
         mPagerAdapter = new PagerAdapter(this);
-
         viewPager2.setAdapter(mPagerAdapter);
 
         new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -249,6 +250,13 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
                 invalidateOptionsMenu();
+                deviceDataList.clear();
+                if(gridviewFragment != null) {
+                    gridviewFragment.refreshDeviceData();
+                }
+                if(listviewFragment != null) {
+                    listviewFragment.refreshDeviceData();
+                }
                 clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
@@ -341,7 +349,7 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     deviceNumber = Integer.parseUnsignedInt(filterData[i], 16);
                     if(deviceNumber > 0 && deviceNumber <= totalTag) {
                         deviceNumber = deviceNumber - 1;
-                        duplicateValue = deviceDataList.get(deviceNumber).getDuplicate() + 1;
+                        duplicateValue = deviceDataList.get(deviceNumber).getDuplicate();
                         totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[i+2], 16), Integer.parseUnsignedInt(filterData[i+3], 16));
 
                         deviceDataList.get(deviceNumber).setReader(String.valueOf(Integer.parseUnsignedInt(filterData[1], 16)));
@@ -366,6 +374,8 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         double totalCurrent;
         int totalPeriod;
         int header;
+        byte[] ownerName = new byte[16];
+        String ownerNameText;
 
         if (data != null) {
             mEepData.setText(data);
@@ -384,7 +394,11 @@ public class DeviceDataTabActivity extends AppCompatActivity {
                     deviceDataList.get(deviceNumber).setCutoffPeriod(totalPeriod);
                     deviceDataList.get(deviceNumber).setOnOffSetting(Integer.parseUnsignedInt(filterData[onOffPtr], 16));
                     deviceDataList.get(deviceNumber).setAutoReconnect(Integer.parseUnsignedInt(filterData[autoConnPtr], 16));
-                    deviceDataList.get(deviceNumber).setOwnerName(String.valueOf(Integer.parseUnsignedInt(filterData[ownerPtr], 16)));
+                    for(int j = 0; j < ownerNameSize; j++) {
+                        ownerName[j] = Byte.parseByte(filterData[ownerPtr + j], 16);
+                    }
+                    ownerNameText = new String(ownerName, StandardCharsets.UTF_8);
+                    deviceDataList.get(deviceNumber).setOwnerName(ownerNameText);
                 }
             }
         }
@@ -442,12 +456,12 @@ public class DeviceDataTabActivity extends AppCompatActivity {
         return totalPeriod;
     }
 
-    public int getSpanCount() {
-        int columnWidth;
+    public static int getSpanCount(int columnWidth) {
+//        int columnWidth;
         int minWidth = 800;
         int spanCount;
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        columnWidth = Math.round(tabLayout.getWidth() / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+//        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+//        columnWidth = Math.round(tabLayout.getWidth() / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         if(columnWidth >= minWidth) {
             spanCount = 10;
         } else {
@@ -471,10 +485,10 @@ public class DeviceDataTabActivity extends AppCompatActivity {
 //                    allFragment = AllFragment.newInstance(deviceDataList, getSpanCount());
 //                    return allFragment;
                 case 0:
-                    gridviewFragment = GridviewFragment.newInstance(deviceDataList, getSpanCount());
+                    gridviewFragment = GridviewFragment.newInstance(deviceDataList);
                     return gridviewFragment;
                 case 1:
-                    listviewFragment = ListviewFragment.newInstance(deviceDataList, getSpanCount());
+                    listviewFragment = ListviewFragment.newInstance(deviceDataList);
                     return listviewFragment;
                 default:
                     return null;
