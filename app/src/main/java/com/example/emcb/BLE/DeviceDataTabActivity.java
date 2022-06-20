@@ -44,14 +44,6 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     private final String LIST_UUID = "UUID";
 
     private byte[] getEepData = {0x41};
-    private final int currentPtr = 1;
-    private final int idPtr = 3;
-    private final int cutoffPtr = 5;
-    private final int onOffPtr = 7;
-    private final int autoConnPtr = 8;
-    private final int ownerPtr = 9;
-    private final int ownerNameSize = 15;
-
     private int EepOn = 0;
 
     private ArrayList<String> existingReader;
@@ -73,8 +65,6 @@ public class DeviceDataTabActivity extends AppCompatActivity {
     PagerAdapter mPagerAdapter;
     ViewPager2 viewPager2;
     TabLayout tabLayout;
-
-    AllFragment allFragment;
     GridviewFragment gridviewFragment;
     ListviewFragment listviewFragment;
 
@@ -128,9 +118,6 @@ public class DeviceDataTabActivity extends AppCompatActivity {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch(position) {
-//                    case 0:
-//                        tab.setText("All");
-//                        break;
                     case 0:
                         tab.setIcon(R.drawable.ic_baseline_grid_view_24);
                         break;
@@ -383,19 +370,19 @@ public class DeviceDataTabActivity extends AppCompatActivity {
             header = Integer.parseUnsignedInt(filterData[0], 16);
 
             if(header == 0) {
-                deviceNumber = Integer.parseUnsignedInt(filterData[idPtr], 16);
+                deviceNumber = Integer.parseUnsignedInt(filterData[3], 16);
                 if(deviceNumber > 0 && deviceNumber <= totalTag) {
                     deviceNumber = deviceNumber - 1;
-                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[currentPtr], 16), Integer.parseUnsignedInt(filterData[currentPtr + 1], 16));
-                    totalPeriod = calculateTotalPeriod(Integer.parseUnsignedInt(filterData[cutoffPtr], 16), Integer.parseUnsignedInt(filterData[cutoffPtr + 1], 16));
+                    totalCurrent = calculateTotalCurrent(Integer.parseUnsignedInt(filterData[1], 16), Integer.parseUnsignedInt(filterData[2], 16));
+                    totalPeriod = calculateTotalPeriod(Integer.parseUnsignedInt(filterData[5], 16), Integer.parseUnsignedInt(filterData[6], 16));
 
                     deviceDataList.get(deviceNumber).setCurrentSetting(totalCurrent);
-                    deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[idPtr], 16)));
+                    deviceDataList.get(deviceNumber).setName(String.valueOf(Integer.parseUnsignedInt(filterData[3], 16)));
                     deviceDataList.get(deviceNumber).setCutoffPeriod(totalPeriod);
-                    deviceDataList.get(deviceNumber).setOnOffSetting(Integer.parseUnsignedInt(filterData[onOffPtr], 16));
-                    deviceDataList.get(deviceNumber).setAutoReconnect(Integer.parseUnsignedInt(filterData[autoConnPtr], 16));
-                    for(int j = 0; j < ownerNameSize; j++) {
-                        ownerName[j] = Byte.parseByte(filterData[ownerPtr + j], 16);
+                    deviceDataList.get(deviceNumber).setOnOffSetting(Integer.parseUnsignedInt(filterData[7], 16));
+                    deviceDataList.get(deviceNumber).setAutoReconnect(Integer.parseUnsignedInt(filterData[8], 16));
+                    for(int j = 0; j < 15; j++) {
+                        ownerName[j] = Byte.parseByte(filterData[9 + j], 16);
                     }
                     ownerNameText = new String(ownerName, StandardCharsets.UTF_8);
                     deviceDataList.get(deviceNumber).setOwnerName(ownerNameText);
