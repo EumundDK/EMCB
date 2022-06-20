@@ -34,6 +34,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
     private static final int selectStatusCheck = 8;
     private static final int onOffStatusCheck = 16;
 
+
     private static final int onCmd = 241;
     private static final int offCmd = 242;
     private static final int selectCmd = 248;
