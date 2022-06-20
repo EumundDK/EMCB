@@ -39,16 +39,24 @@
                         android:gravity="center"
                         android:text="100"
                         android:textStyle="bold"
-                        android:textSize="24sp"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/itemStatusOnOff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_circle_grey_24"
+                        app:layout_constraintStart_toEndOf="@+id/itemNameTextView"
+                        app:layout_constraintTop_toTopOf="@id/itemNameTextView"/>
 
                     <TextView
                         android:id="@+id/itemCurrentTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="99.9"
-                        android:textSize="32sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -59,24 +67,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="A"
-                        android:textSize="32sp"
+                        android:textSize="24sp"
                         app:layout_constraintStart_toEndOf="@id/itemCurrentTextView"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginEnd="30dp"/>
-
-                    <ImageView
-                        android:id="@+id/itemStatusOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:src="@drawable/ic_baseline_circle_grey_24"
-                        app:layout_constraintEnd_toStartOf="@+id/onOffButton"
-                        app:layout_constraintTop_toTopOf="@id/onOffButton"/>
 
                     <Button
                         android:id="@+id/onOffButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:padding="2dp"
                         android:layout_gravity="center"
                         android:backgroundTint="@color/bright_grey"
                         android:text="On/Off"
@@ -90,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="8sp"
                         android:text="More Details"
+                        android:textColor="@color/st_light_blue"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/itemNameTextView"/>
 
@@ -101,81 +104,193 @@
                 android:id="@+id/extraDetailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <TableLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <TableRow>
+                    <TextView
+                        android:id="@+id/readerExtra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reader X"
+                        android:textSize="10sp"/>
+                </TableRow>
+
+                <TableRow>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current Setting :"/>
+                        android:text="Current Setting :"
+                        android:textSize="10sp"/>
 
                     <TextView
                         android:id="@+id/currentSettingExtra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1.0"/>
-
+                        android:text="1.0"
+                        android:textSize="10sp"/>
+                </TableRow>
+                <TableRow>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="On/Off Setting :"/>
+                        android:text="On/Off Setting :"
+                        android:textSize="10sp"/>
 
                     <TextView
                         android:id="@+id/onOffSettingExtra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"/>
+                        android:text="0"
+                        android:textSize="10sp"/>
+                </TableRow>
+            </TableLayout>
 
+            <TableLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Auto Reconnect :"/>
-
-                    <TextView
-                        android:id="@+id/autoReconnectExtra"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cut-off Period :"/>
-
-                    <TextView
-                        android:id="@+id/cutOffPeriodExtra"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reader X"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Owner Name :"/>
+                        android:text="Owner Name :"
+                        android:textSize="10sp"/>
 
                     <TextView
                         android:id="@+id/ownerNameExtra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DengKai"/>
-                </LinearLayout>
+                        android:text="DengKai"
+                        android:textSize="10sp"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cut-off Period :"
+                        android:textSize="10sp"/>
+
+                    <TextView
+                        android:id="@+id/cutOffPeriodExtra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textSize="10sp"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Auto Reconnect :"
+                        android:textSize="10sp"/>
+
+                    <TextView
+                        android:id="@+id/autoReconnectExtra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="10sp"/>
+                </TableRow>
+
+            </TableLayout>
+<!--            <LinearLayout-->
+<!--                android:id="@+id/extraDetailLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:visibility="visible">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Current Setting :"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/currentSettingExtra"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="1.0"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="On/Off Setting :"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/onOffSettingExtra"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Auto Reconnect :"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/autoReconnectExtra"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Cut-off Period :"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/cutOffPeriodExtra"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="20"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Reader X"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Owner Name :"-->
+<!--                        android:textSize="10sp"/>-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/ownerNameExtra"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="DengKai"-->
+<!--                        android:textSize="10sp"/>-->
+<!--                </LinearLayout>-->
 
             </LinearLayout>
 

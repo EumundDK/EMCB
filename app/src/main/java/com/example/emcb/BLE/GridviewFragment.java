@@ -61,10 +61,8 @@ public class GridviewFragment extends Fragment {
         return view;
     }
 
-    public void updateDeviceData(ArrayList<DeviceData> newDeviceDataList) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new BleDiffUtilCallbacks(mDeviceDataList, newDeviceDataList));
-        mDeviceDataList = newDeviceDataList;
-        diffResult.dispatchUpdatesTo(myGridViewAdapter);
+    public void updateDeviceData(int position) {
+        myGridViewAdapter.updateDeviceData(position);
 
     }
 }

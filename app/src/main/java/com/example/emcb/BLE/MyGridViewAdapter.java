@@ -28,7 +28,6 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
 
     private LayoutInflater mInflater;
     private ArrayList<DeviceData> mDeviceDataList;
-    private BluetoothLeService mBluetoothLeService = new BluetoothLeService();
 
     private int itemSelectedCard = RecyclerView.NO_POSITION;
     private int previousItemSelectCard = RecyclerView.NO_POSITION;
@@ -86,7 +85,7 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     notifyItemChanged(itemSelectedCard);
                     myCommand[1] = Byte.parseByte(mDeviceDataList.get(itemSelectedCard).getName());
                     myCommand[2] = 0x03;
-                    mBluetoothLeService.writeCharacteristicData(myCommand);
+                    DeviceDataTabActivity.writeCharacteristicData(myCommand);
                     Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " Selected", LENGTH_SHORT).show();
                 }
             });
@@ -100,14 +99,14 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
                     if((itemStatus & onOffStatusCheck) == offStatus) {
                         myCommand[1] = itemName;
                         myCommand[2] = 0x02;
-                        mBluetoothLeService.writeCharacteristicData(myCommand);
+                        DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " ON", LENGTH_SHORT).show();
                     }
 
                     if((itemStatus & onOffStatusCheck) == onStatus) {
                         myCommand[1] = itemName;
                         myCommand[2] = 0x01;
-                        mBluetoothLeService.writeCharacteristicData(myCommand);
+                        DeviceDataTabActivity.writeCharacteristicData(myCommand);
                         Toast.makeText(mInflater.getContext(), "Tag No. " + Arrays.toString(myCommand) + " OFF", LENGTH_SHORT).show();
                     }
                 }
@@ -161,5 +160,9 @@ public class MyGridViewAdapter extends RecyclerView.Adapter<MyGridViewAdapter.Vi
         } else if ((itemStatus & onOffStatusCheck) == offStatus) {
             holder.mStatusOff.setImageDrawable(mInflater.getContext().getDrawable(R.drawable.ic_baseline_circle_red_12));
         }
+    }
+
+    public void updateDeviceData(int position) {
+        this.notifyItemChanged(position);
     }
 }

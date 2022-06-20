@@ -24,6 +24,7 @@ import java.util.List;
 public class AllFragment extends Fragment {
 
     private static final String DEVICE_DATA_LIST = "device_data_list";
+    private static final String BLUETOOTH_SERVICE = "bluetooth_service";
     private static final String GRID_COUNT = "grid_count";
 
     private RecyclerView recyclerView;
@@ -64,8 +65,8 @@ public class AllFragment extends Fragment {
         return view;
     }
 
-    public void updateTabData(ArrayList<DeviceData> deviceDataList) {
-       myAllViewAdapter.updateDeviceData(deviceDataList);
+    public void updateTabData(int position) {
+       myAllViewAdapter.updateDeviceData(position);
     }
 
 }
